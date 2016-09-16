@@ -13,6 +13,9 @@
 # the License.
 
 """napalm_ios package."""
+from __future__ import print_function
+from __future__ import unicode_literals
+
 from pkg_resources import get_distribution
 from napalm_ios.ios import IOSDriver
 
