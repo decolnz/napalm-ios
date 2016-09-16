@@ -800,7 +800,7 @@ class IOSDriver(NetworkDriver):
         interfaces_new = {}
         for k, val in interfaces.items():
             if bool(val):
-                interfaces_new[k] = v
+                interfaces_new[k] = val
         return interfaces_new
 
     @staticmethod
