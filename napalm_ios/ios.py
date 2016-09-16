@@ -14,6 +14,13 @@
 # the License.
 
 from __future__ import print_function
+from __future__ import unicode_literals
+
+# Python3 support
+try:
+  basestring
+except NameError:
+  basestring = str
 
 import re
 
@@ -569,10 +576,10 @@ class IOSDriver(NetworkDriver):
         return {
             'uptime': uptime,
             'vendor': vendor,
-            'os_version': unicode(os_version),
-            'serial_number': unicode(serial_number),
-            'model': unicode(model),
-            'hostname': unicode(hostname),
+            'os_version': os_version,
+            'serial_number': serial_number,
+            'model': model,
+            'hostname': hostname,
             'fqdn': fqdn,
             'interface_list': interface_list
         }
@@ -673,7 +680,7 @@ class IOSDriver(NetworkDriver):
                 match_mac = re.match(mac_regex, interface_output, flags=re.DOTALL)
                 group_mac = match_mac.groupdict()
                 mac_address = group_mac["mac_address"]
-                interface_list[interface]['mac_address'] = unicode(mac_address)
+                interface_list[interface]['mac_address'] = mac_address
             except AttributeError:
                 interface_list[interface]['mac_address'] = u'N/A'
             try:
@@ -886,7 +893,7 @@ class IOSDriver(NetworkDriver):
                 router_id = match.group(1)
                 local_as = int(match.group(2))
                 break
-        bgp_neighbor_data['global']['router_id'] = unicode(router_id)
+        bgp_neighbor_data['global']['router_id'] = router_id
         bgp_neighbor_data['global']['peers'] = {}
 
         cmd_neighbor_table = 'show ip bgp summary | begin Neighbor'
@@ -929,7 +936,7 @@ class IOSDriver(NetworkDriver):
             peer_dict['local_as'] = local_as
             peer_dict['is_enabled'] = is_enabled
             peer_dict['is_up'] = is_up
-            peer_dict['remote_id'] = unicode(remote_rid)
+            peer_dict['remote_id'] = remote_rid
 
             cmd_current_prefixes = 'show ip bgp neighbors {} | inc Prefixes Current'.format(peer_id)
             # output: Prefixes Current:               0          0
@@ -1208,12 +1215,12 @@ class IOSDriver(NetworkDriver):
                 address_regex = re.match('(\W*)([0-9.*]*)', address)
             try:
                 ntp_stats.append({
-                    'remote': unicode(address_regex.group(2)),
+                    'remote': address_regex.group(2),
                     'synchronized': ('*' in address_regex.group(1)),
-                    'referenceid': unicode(ref_clock),
+                    'referenceid': ref_clock,
                     'stratum': int(st),
                     'type': u'-',
-                    'when': unicode(when),
+                    'when': when,
                     'hostpoll': int(poll),
                     'reachability': int(reach),
                     'delay': float(delay),
@@ -1389,7 +1396,7 @@ class IOSDriver(NetworkDriver):
                     })
                     results_array = []
                     for i in range(probes_received):
-                        results_array.append({'ip_address': unicode(destination), 'rtt': 0.0})
+                        results_array.append({'ip_address': destination, 'rtt': 0.0})
 
                     ping_dict['success'].update({'results': results_array})
 
